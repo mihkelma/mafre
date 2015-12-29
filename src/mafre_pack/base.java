@@ -2,10 +2,18 @@ package mafre_pack;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -37,6 +45,7 @@ public class base extends Application {
         BorderPane border = new BorderPane();
         HBox hbox = createTopBox();
         border.setTop(hbox);
+        addStackPane(hbox);         // Add stack to HBox in top region
 
 
         Scene stseen = new Scene(border);
@@ -45,11 +54,31 @@ public class base extends Application {
 
     }
 
-    private HBox createTopBox() {
+    public void addStackPane(HBox inbox) {
+        StackPane stack = new StackPane();
+        Rectangle logoBack = new Rectangle(30.0, 50.0);
+        logoBack.setStroke(Color.web("#D0E6FA"));
+        logoBack.setArcHeight(3.5);
+        logoBack.setArcWidth(3.5);
+
+        Text logo = new Text("mafre");
+        logo.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
+        logo.setFill(Color.DARKMAGENTA);
+        logo.setStroke(Color.web("#7080A0"));
+
+        stack.getChildren().addAll(logoBack, logo);
+        stack.setAlignment(Pos.CENTER_RIGHT);
+
+        inbox.getChildren().add(stack);
+        HBox.setHgrow(stack, Priority.ALWAYS);
+    }
+
+    public HBox createTopBox() {
         HBox hbox = new HBox();
         hbox.setPadding(new Insets(10,10,10,10));
         hbox.setSpacing(6);
-        hbox.setStyle("-fx-background-color: #333333;");
+        hbox.setStyle("-fx-background-color: #ffffff;");
+
 
         Button grabBtn = new Button("Grab");
         Button showBtn = new Button("Show");

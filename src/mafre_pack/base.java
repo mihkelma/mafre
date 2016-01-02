@@ -2,13 +2,14 @@ package mafre_pack;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -24,7 +25,7 @@ import java.io.IOException;
  */
 public class base extends Application {
 
-
+    private TableView table = new TableView();
     public static void main(String[] args)  throws IOException {
 
         launch(args);
@@ -43,9 +44,11 @@ public class base extends Application {
 
 
         BorderPane border = new BorderPane();
+        border.setPrefSize(800,600);
         HBox hbox = createTopBox();
+        VBox midbox = createMidBox();
         border.setTop(hbox);
-        addStackPane(hbox);         // Add stack to HBox in top region
+        border.setCenter(midbox);
 
 
         Scene stseen = new Scene(border);
@@ -54,35 +57,61 @@ public class base extends Application {
 
     }
 
-    public void addStackPane(HBox inbox) {
-        StackPane stack = new StackPane();
-        Rectangle logoBack = new Rectangle(30.0, 50.0);
-        logoBack.setStroke(Color.web("#D0E6FA"));
-        logoBack.setArcHeight(3.5);
-        logoBack.setArcWidth(3.5);
+    private VBox createMidBox() {
+        VBox vbox = new VBox();
+        final Label label = new Label("Objekt tänav 24");
+        label.setFont(new Font("Arial", 20));
 
-        Text logo = new Text("mafre");
-        logo.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
-        logo.setFill(Color.DARKMAGENTA);
-        logo.setStroke(Color.web("#7080A0"));
+        TableColumn apartmentNo = new TableColumn("#");
+        TableColumn floor = new TableColumn("Floor");
+        TableColumn size = new TableColumn("Size");
+        TableColumn balcony = new TableColumn("Balcony");
+        TableColumn price = new TableColumn("Price");
 
-        stack.getChildren().addAll(logoBack, logo);
-        stack.setAlignment(Pos.CENTER_RIGHT);
+        table.getColumns().addAll(apartmentNo, floor, size, balcony, price);
 
-        inbox.getChildren().add(stack);
-        HBox.setHgrow(stack, Priority.ALWAYS);
+        vbox.setPadding(new Insets(10, 0, 0, 10));
+        vbox.getChildren().addAll(label, table);
+
+        return vbox;
+
+
+        
     }
+
 
     public HBox createTopBox() {
         HBox hbox = new HBox();
-        hbox.setPadding(new Insets(10,10,10,10));
-        hbox.setSpacing(6);
-        hbox.setStyle("-fx-background-color: #ffffff;");
+        //hbox.setPadding(new Insets(10,10,10,10));
+        hbox.setStyle("-fx-background-color: #494993;");
 
+        Rectangle rectBtnOne = new Rectangle(100, 60);
+        rectBtnOne.setFill(Color.web("#494993"));
+        Text grabArea = new Text("GRAB");
+        grabArea.setFont(Font.font("Arial", FontWeight.LIGHT, 18));
+        grabArea.setFill(Color.web("#b0b0b0"));
+        StackPane stack = new StackPane();
+        stack.getChildren().addAll(rectBtnOne, grabArea);
 
-        Button grabBtn = new Button("Grab");
-        Button showBtn = new Button("Show");
-        hbox.getChildren().addAll(grabBtn, showBtn);
+        Rectangle rectBtnTwo = new Rectangle(100, 60);
+        rectBtnTwo.setFill(Color.web("#494993"));
+        Text showArea = new Text("SHOW");
+        showArea.setFont(Font.font("Arial", FontWeight.LIGHT, 18));
+        showArea.setFill(Color.web("#b0b0b0"));
+        StackPane stack1 = new StackPane();
+        stack1.getChildren().addAll(rectBtnTwo, showArea);
+
+        //Ristkülik logo jaoks
+        Rectangle rectangle = new Rectangle(20,20,220,50);
+        rectangle.setFill(Color.web("#494993"));
+        Text logo = new Text("mafre");
+        logo.setFont(Font.font("Arial", FontWeight.LIGHT, 16));
+        logo.setFill(Color.WHITE);
+
+        StackPane stack2 = new StackPane();
+        stack2.getChildren().addAll(rectangle, logo);
+
+        hbox.getChildren().addAll(stack2,stack, stack1);
 
         return hbox;
     }

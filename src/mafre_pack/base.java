@@ -1,153 +1,111 @@
 package mafre_pack;
 
+
 import javafx.application.Application;
-import javafx.geometry.Insets;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
-import java.io.IOException;
 
 /**
  * Created by mihkelm on 10/11/15.
  * http://www.promenaadimaja.ee/korterid/korrused/linnamaja-2nd-floor
+ * Programm võimaldab internetist alla tõmmata kinnisvara uusarenduste andmeid,
+ * salvestada need andmebaasi ning hiljem kuvada neid tabelis
  */
 public class base extends Application {
 
-    private TableView table = new TableView();
-    public static void main(String[] args)  throws IOException {
+    Stage lava;
+    HBox nupuRida;
+    VBox aken;
+    TableView<Apartment> table;
 
-        launch(args);
-        kuvaVorm();
-        //laadiAndmed();
-        //salvestaAndmed();
-        //kysiObjekt();
-        //kuvaObjektiAndmed();
-        //teeArvutused();
-        //lopetaProgramm();
-        }
+    int aknaLaiusPikslites = 800;
+    int aknaPikkusPikslites = 600;
+
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("Window title");
+        lava = primaryStage;
+        seadistaAken();
 
+        //Korterinumbri tulp
+        TableColumn<Apartment, String> numberColumn = new TableColumn<>("Korter");
+        numberColumn.setMinWidth(50);
+        numberColumn.setCellValueFactory(new PropertyValueFactory<Apartment, String>("korteriNumber"));
 
-        BorderPane border = new BorderPane();
-        border.setPrefSize(800,600);
-        HBox hbox = createTopBox();
-        VBox midbox = createMidBox();
-        border.setTop(hbox);
-        border.setCenter(midbox);
+        //Tubade tulp
+        TableColumn<Apartment, Integer> tubaColumn = new TableColumn<>("Tubade arv");
+        tubaColumn.setMinWidth(50);
+        tubaColumn.setCellValueFactory(new PropertyValueFactory<Apartment, Integer>("tubadeArv"));
 
+        //Korteri suuruse tulp
+        TableColumn<Apartment, Double> suurusColumn = new TableColumn<>("Suurus");
+        suurusColumn.setMinWidth(50);
+        suurusColumn.setCellValueFactory(new PropertyValueFactory<Apartment, Double>("suurus"));
 
-        Scene stseen = new Scene(border);
-        primaryStage.setScene(stseen);
-        primaryStage.show();
+        //Korteri hinna tulp
+        TableColumn<Apartment, Double> hindColumn = new TableColumn<>("Hind");
+        hindColumn.setMinWidth(50);
+        hindColumn.setCellValueFactory(new PropertyValueFactory<Apartment, Double>("hind"));
 
+        //Korteri oleku tulp
+        TableColumn<Apartment, String> olekColumn = new TableColumn<>("Olek");
+        olekColumn.setMinWidth(50);
+        olekColumn.setCellValueFactory(new PropertyValueFactory<Apartment, String>("olek"));
+
+        table = new TableView<>();
+        table.setItems(getApartment());
+        table.getColumns().addAll(numberColumn, tubaColumn, suurusColumn, hindColumn, olekColumn);
+
+        aken.getChildren().addAll(table);
+        //lisaTabel();
+        //reageeriKlikile();
+        //tombaAndmed();
+        //salvestaAndmed();
+        //kuvaAndmed();
+        //lopp();
     }
 
-    private VBox createMidBox() {
-        VBox vbox = new VBox();
-        final Label label = new Label("Objekt tänav 24");
-        label.setFont(new Font("Arial", 20));
-
-        TableColumn apartmentNo = new TableColumn("#");
-        TableColumn floor = new TableColumn("Floor");
-        TableColumn size = new TableColumn("Size");
-        TableColumn balcony = new TableColumn("Balcony");
-        TableColumn price = new TableColumn("Price");
-
-        table.getColumns().addAll(apartmentNo, floor, size, balcony, price);
-
-        vbox.setPadding(new Insets(10, 0, 0, 10));
-        vbox.getChildren().addAll(label, table);
-
-        return vbox;
-
-
-        
+    //Get all of the apartments
+    public ObservableList<Apartment> getApartment() {
+        ObservableList<Apartment> apartments = FXCollections.observableArrayList();
+        apartments.add(new Apartment("3-1",2, 47.8, 120000.00, "Vaba"));
+        apartments.add(new Apartment("3-2",3, 77.3, 130400.00, "Vaba"));
+        apartments.add(new Apartment("3-3",1, 37.2, 117000.00, "Vaba"));
+        apartments.add(new Apartment("3-4",2, 46.5, 131100.00, "Vaba"));
+        apartments.add(new Apartment("3-5",2, 41.1, 138500.00, "Vaba"));
+        apartments.add(new Apartment("3-6",3, 87.9, 156300.00, "Vaba"));
+        return apartments;
     }
 
+    private void seadistaAken() {
+        aken = new VBox();
+        aken.setSpacing(2);
+        nupuRida = new HBox();
+        nupuRida.setSpacing(5);
 
-    public HBox createTopBox() {
-        HBox hbox = new HBox();
-        //hbox.setPadding(new Insets(10,10,10,10));
-        hbox.setStyle("-fx-background-color: #494993;");
+        //Lisa nupuritta 2 nuppu
+        Button btn1 = new Button("Tõmba andmed");
+        btn1.setId("tomba");
+        Button btn2 = new Button("Kuva andmeid");
+        btn2.setId("kuva");
+        nupuRida.getChildren().addAll(btn1, btn2);
 
-        Rectangle rectBtnOne = new Rectangle(100, 60);
-        rectBtnOne.setFill(Color.web("#494993"));
-        Text grabArea = new Text("GRAB");
-        grabArea.setFont(Font.font("Arial", FontWeight.LIGHT, 18));
-        grabArea.setFill(Color.web("#b0b0b0"));
-        StackPane stack = new StackPane();
-        stack.getChildren().addAll(rectBtnOne, grabArea);
+        //lisa nupurida põhiaknasse
+        aken.getChildren().addAll(nupuRida);
 
-        Rectangle rectBtnTwo = new Rectangle(100, 60);
-        rectBtnTwo.setFill(Color.web("#494993"));
-        Text showArea = new Text("SHOW");
-        showArea.setFont(Font.font("Arial", FontWeight.LIGHT, 18));
-        showArea.setFill(Color.web("#b0b0b0"));
-        StackPane stack1 = new StackPane();
-        stack1.getChildren().addAll(rectBtnTwo, showArea);
+        //määrame lava mõõtmed ja lisame sellesse menüü ning tabeli
+        Scene kuvaStseen = new Scene(aken, aknaLaiusPikslites, aknaPikkusPikslites);
+        lava.setScene(kuvaStseen);
+        lava.show();
+        lava.setOnCloseRequest(event -> System.exit(0));
 
-        //Ristkülik logo jaoks
-        Rectangle rectangle = new Rectangle(20,20,220,50);
-        rectangle.setFill(Color.web("#494993"));
-        Text logo = new Text("mafre");
-        logo.setFont(Font.font("Arial", FontWeight.LIGHT, 16));
-        logo.setFill(Color.WHITE);
-
-        StackPane stack2 = new StackPane();
-        stack2.getChildren().addAll(rectangle, logo);
-
-        hbox.getChildren().addAll(stack2,stack, stack1);
-
-        return hbox;
-    }
-
-    private static void laadiAndmed() {
-        /*File input = new File ("promenaadi.html");
-        Document doc = Jsoup.parse(input, "UTF-8");
-        Elements table = doc.select("table");
-        Elements rows = table.select("tr");
-        Dictionary testDict = null;
-        ArrayList al = new ArrayList();
-
-
-
-        for (int i = 1; i < rows.size(); i++) {
-            Element row = rows.get(i);
-            Elements tds = row.select("td");
-            Integer elemente= tds.size();
-
-            for (int j = 0; j < elemente; j++) {
-
-            }
-
-            String var1 = tds.get(0).text();
-            String var2 = var1.substring(var1.length() - 1);
-            String rooms = tds.get(1).text();
-            String size = tds.get(2).text();
-            String balcony = tds.get(3).text();
-            String price = tds.get(4).text();
-            String status = tds.get(5).text();
-
-
-            System.out.println(elemente);*/
-    }
-
-    private static void kuvaVorm() {
-    System.out.println("Pluti");
     }
 }

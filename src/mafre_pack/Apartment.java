@@ -2,6 +2,7 @@ package mafre_pack;
 
 /**
  * Created by mihkelm on 20/01/16.
+ *
  */
 public class Apartment {
 

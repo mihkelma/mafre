@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 /**
  * Created by mihkelm on 23/01/16.
@@ -68,7 +69,8 @@ public class Andmebaas {
 
         try {
             stat = conn.createStatement();
-            String sql = "SELECT Korter, Tube, Suurus, Hind, Olek FROM Objects;";
+            String sql = "SELECT Korter, Tube, Suurus, Hind, Olek FROM Objects WHERE Lisatud >= '2016-01-22' " +
+                    "AND Lisatud <= '2016-01-23';";
 
             ResultSet rs = stat.executeQuery(sql);
             // Kui stat.executeQuery() toob tagasi tühja tulemuse, siis rs'i kasutada ei saa
@@ -76,7 +78,6 @@ public class Andmebaas {
             while (rs.next()) {
                 apartments.add(new Apartment(rs.getString("Korter"), rs.getInt("Tube"),rs.getFloat("Suurus"),
                         rs.getFloat("Hind"), rs.getString("Olek")));
-
             }
 
         } catch (SQLException e) {
@@ -86,6 +87,26 @@ public class Andmebaas {
         return apartments;
     }
 
+    public void setApartment(ArrayList<Apartment> al) {
+        Statement stat = null;
+
+        for (Apartment apartm : al) {
+
+            try {
+                stat = conn.createStatement();
+                String sql = "INSERT INTO Objects(Korter, Tube, Suurus, Hind, Olek, Lisatud) VALUES ('"+apartm.getKorteriNumber()+"'," +
+                        "'"+apartm.getTubadeArv()+"','"+apartm.getSuurus()+"','"+apartm.getHind()+"','"+apartm.getOlek()+"','"+
+                        "2016-01-24';";
+
+                ResultSet rs = stat.executeQuery(sql);
+                // Kui stat.executeQuery() toob tagasi tühja tulemuse, siis rs'i kasutada ei saa
+
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 
 }
